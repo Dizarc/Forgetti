@@ -4,12 +4,11 @@ const QString DatabaseManager::docPath =
     QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ForgettiDocuments";
 
 DatabaseManager::DatabaseManager(QObject *parent)
-    : QObject{parent}
 {
     QDir documentsDir(docPath);
     if(!documentsDir.exists())
         documentsDir.mkpath(".");
-
+    qWarning()<< documentsDir.path();
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setHostName("localhost");
     db.setDatabaseName(docPath + "/forgetti");
@@ -20,10 +19,11 @@ DatabaseManager::DatabaseManager(QObject *parent)
         qWarning() << "Problem occured while connecting to db!";
         exit(-1);
     }
-    //if(db.tables().isEmpty()){
+
+    if(db.tables().isEmpty()){
         create();
-       // qWarning() <<"CREATING";
-    //}
+        qWarning() <<"CREATING";
+    }
 }
 
 void DatabaseManager::create()
@@ -41,8 +41,7 @@ void DatabaseManager::createTables()
 
     QString groupTable = "CREATE TABLE Groups("
                          " id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                         " name TEXT NOT NULL,"
-                         " picture TEXT);";
+                         " name TEXT NOT NULL);";
     if(!query.exec(groupTable))
         qWarning()<< "Error creating group table...";
 
@@ -57,5 +56,11 @@ void DatabaseManager::createTables()
 
 void DatabaseManager::insertValues()
 {
+    QSqlQuery query;
 
+    QString groupsInsert = "INSERT INTO Groups(name) VALUES"
+                             " (\"Leaving home\"),"
+                             " (\"Leaving office\");";
+    if(!query.exec(groupsInsert))
+        qWarning()<< "Problem while adding to Groups table...";
 }

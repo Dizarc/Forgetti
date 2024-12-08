@@ -2,13 +2,16 @@
 #include <QQmlApplicationEngine>
 
 #include "DatabaseManager.h"
+#include "GroupsModel.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    DatabaseManager *db = new DatabaseManager(&app);
-    qmlRegisterSingletonInstance("com.company.DatabaseManager", 1, 0 ,"DatabaseManager", db);
+    DatabaseManager db(&app);
+
+    GroupsModel *groups = new GroupsModel(&app);
+    qmlRegisterSingletonInstance("com.company.GroupsModel", 1, 0, "GroupsModel", groups);
 
     QQmlApplicationEngine engine;
     QObject::connect(

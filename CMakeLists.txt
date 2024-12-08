@@ -11,16 +11,24 @@ qt_standard_project_setup(REQUIRES 6.5)
 qt_add_executable(appForgetti
     main.cpp
     DatabaseManager.h DatabaseManager.cpp
+    GroupsModel.h GroupsModel.cpp
 )
 
 qt_add_qml_module(appForgetti
     URI Forgetti
     VERSION 1.0
+
     QML_FILES
         Main.qml
+
+    RESOURCES
+        qtquickcontrols2.conf
+        icons/back.png
+        icons/menu.png
 )
 
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
+# Qt for iOS sets MACOSX_BUN
+#DLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an
 # explicit, fixed bundle identifier manually though.
 set_target_properties(appForgetti PROPERTIES
