@@ -11,37 +11,28 @@ ApplicationWindow {
 
   title: qsTr("Forgetti")
 
-  Action {
-      id: optionsMenuAction
-      icon.source: "./icons/menu"
-      onTriggered: optionsMenu.open()
-  }
-
-  Action {
-      id: navigateBackAction
-      icon.source: stackView.depth > 1 ? "./icons/back" : ""
-      onTriggered: {
-          if (stackView.depth > 1) {
-              stackView.pop()
-          }
-      }
-  }
-
-  header: ToolBar{
+  header: ToolBar {
     Material.foreground: "white"
 
     RowLayout {
       spacing: 20
+
       anchors.fill: parent
 
       ToolButton {
-        action: navigateBackAction
+        text: qsTr("<")
+
+        enabled: stackView.depth === 1 ? false : true
+
+        onClicked: {
+          if (stackView.depth > 1)
+              stackView.pop()
+        }
       }
 
       Label {
-        id: titleLabel
-
         text: if(stackView.depth === 1) qsTr("Forgetti")
+
         elide: Label.ElideRight
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
@@ -49,10 +40,12 @@ ApplicationWindow {
       }
 
       ToolButton {
-        action: optionsMenuAction
+        text: qsTr("⋮")
+
+        onClicked : menu.open()
 
         Menu {
-          id: optionsMenu
+          id: menu
 
           x: parent.width - width
           transformOrigin: Menu.TopRight
@@ -103,7 +96,4 @@ ApplicationWindow {
       }
     }
   }
-
-
-
 }

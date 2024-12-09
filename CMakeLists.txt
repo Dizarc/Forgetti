@@ -23,8 +23,6 @@ qt_add_qml_module(appForgetti
 
     RESOURCES
         qtquickcontrols2.conf
-        icons/back.png
-        icons/menu.png
 )
 
 # Qt for iOS sets MACOSX_BUN
