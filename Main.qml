@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
-import QtQuick.Controls
+import QtQuick.Controls.Material
 
 import com.company.GroupsModel
 
@@ -12,8 +12,6 @@ ApplicationWindow {
   title: qsTr("Forgetti")
 
   header: ToolBar {
-    Material.foreground: "white"
-
     RowLayout {
       spacing: 20
 
@@ -32,6 +30,7 @@ ApplicationWindow {
 
       Label {
         text: if(stackView.depth === 1) qsTr("Forgetti")
+        font.pixelSize: 20
 
         elide: Label.ElideRight
         horizontalAlignment: Qt.AlignHCenter
@@ -67,6 +66,24 @@ ApplicationWindow {
 
     anchors.fill: parent
 
+    pushEnter: Transition {
+      YAnimator {
+        from: (stackView.mirrored ? -1 : 1) * stackView.height
+        to: 0
+        duration: 300
+        easing.type: Easing.OutCubic
+      }
+    }
+
+    popExit: Transition {
+      YAnimator {
+        from: 0
+        to: (stackView.mirrored ? -1 : 1) * stackView.height
+        duration: 300
+        easing.type: Easing.OutCubic
+      }
+    }
+
     initialItem: TableView {
       id: tableView
 
@@ -86,9 +103,20 @@ ApplicationWindow {
 
         required property int index
 
-        width: tableView.width
-        height: 50
-        text: name
+        Material.theme: Material.System
+
+        implicitWidth: tableView.width
+        implicitHeight: 500
+
+        contentItem: Label {
+          text: groupsDelegate.name
+          font.pixelSize: 18
+          horizontalAlignment: Text.AlignHCenter
+          verticalAlignment: Text.AlignVCenter
+          elide: Text.ElideRight
+        }
+        background: Pane {
+        }
 
         onClicked: {
           console.log("HEY")

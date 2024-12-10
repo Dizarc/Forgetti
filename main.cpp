@@ -3,7 +3,9 @@
 
 #include "DatabaseManager.h"
 #include "GroupsModel.h"
-
+/*
+ * TODO: Make Pane of the tableview delegate look better
+ */
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
@@ -14,6 +16,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonInstance("com.company.GroupsModel", 1, 0, "GroupsModel", groups);
 
     QQmlApplicationEngine engine;
+
     QObject::connect(
         &engine,
         &QQmlApplicationEngine::objectCreationFailed,
