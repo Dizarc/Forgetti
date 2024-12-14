@@ -11,6 +11,8 @@ ApplicationWindow {
 
   title: qsTr("Forgetti")
 
+  Material.theme: Material.System
+
   header: ToolBar {
     RowLayout {
       spacing: 20
@@ -84,44 +86,77 @@ ApplicationWindow {
       }
     }
 
-    initialItem: TableView {
-      id: tableView
+    initialItem: mainView
+  }
 
-      focus: true
+  Component{
+    id: mainView
 
-      flickableDirection: Flickable.VerticalFlick
-      boundsBehavior: Flickable.StopAtBounds
-      ScrollIndicator.vertical: ScrollIndicator { }
+    ColumnLayout{
+      spacing: 0
 
-      model: GroupsModel
+      TableView {
+        id: tableView
 
-      delegate: ItemDelegate {
-        id: groupsDelegate
+        Layout.fillHeight: true
+        Layout.fillWidth: true
 
-        required property int id
-        required property string name
+        focus: true
+        clip: true
+        flickableDirection: Flickable.VerticalFlick
+        boundsBehavior: Flickable.StopAtBounds
+        ScrollIndicator.vertical: ScrollIndicator { }
 
-        required property int index
+        model: GroupsModel
 
-        Material.theme: Material.System
+        delegate: Pane {
+          id: groupsDelegate
 
-        implicitWidth: tableView.width
-        implicitHeight: 500
+          required property int id
+          required property string name
 
-        contentItem: Label {
-          text: groupsDelegate.name
-          font.pixelSize: 18
-          horizontalAlignment: Text.AlignHCenter
-          verticalAlignment: Text.AlignVCenter
-          elide: Text.ElideRight
-        }
-        background: Pane {
-        }
+          required property int index
 
-        onClicked: {
-          console.log("HEY")
+          implicitWidth: tableView.width
+          implicitHeight: 200
+
+          Button {
+            id: groupButton
+
+            padding: 0
+
+            text: groupsDelegate.name
+
+            Material.roundedScale: Material.NotRounded
+
+            anchors.fill: parent
+
+            //NOT a good checking implementation
+            checkable: true
+            onCheckedChanged: {
+              if(groupButton.checked){
+                highlighted = true
+                icon.name = "✓"
+
+                icon.height = 15
+              }
+              else{
+                highlighted = false
+                icon.name = ""
+              }
+            }
+
+            onClicked: console.log("HEY")
+          }
         }
       }
+
+      Button{
+        Layout.alignment: Qt.AlignRight
+
+        text: qsTr("Add")
+      }
+
     }
   }
 }

@@ -4,7 +4,7 @@
 #include "DatabaseManager.h"
 #include "GroupsModel.h"
 /*
- * TODO: Make Pane of the tableview delegate look better
+ * TODO: Make group buttons be checkable
  */
 int main(int argc, char *argv[])
 {
