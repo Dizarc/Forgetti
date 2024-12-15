@@ -5,6 +5,7 @@ import QtQuick.Controls.Material
 import com.company.GroupsModel
 
 ApplicationWindow {
+  id: window
   width: 640
   height: 480
   visible: true
@@ -21,7 +22,6 @@ ApplicationWindow {
 
       ToolButton {
         text: qsTr("<")
-
         enabled: stackView.depth === 1 ? false : true
 
         onClicked: {
@@ -42,21 +42,20 @@ ApplicationWindow {
 
       ToolButton {
         text: qsTr("⋮")
-
         onClicked : menu.open()
 
         Menu {
           id: menu
-
           x: parent.width - width
           transformOrigin: Menu.TopRight
+
           Action {
             text: qsTr("Help")
-            //onTriggered:
+            onTriggered: helpDialog.open()
           }
           Action {
             text: qsTr("About")
-            //onTriggered:
+            onTriggered: aboutDialog.open()
           }
         }
       }
@@ -123,13 +122,10 @@ ApplicationWindow {
           Button {
             id: groupButton
 
-            padding: 0
-
             text: groupsDelegate.name
-
-            Material.roundedScale: Material.NotRounded
-
             anchors.fill: parent
+            padding: 0
+            Material.roundedScale: Material.NotRounded
 
             //NOT a good checking implementation
             checkable: true
@@ -154,9 +150,94 @@ ApplicationWindow {
       Button{
         Layout.alignment: Qt.AlignRight
 
-        text: qsTr("Add")
+        Material.roundedScale: Material.LargeScale
+
+        icon.name: "+"
+        icon.height: 12
+        text: qsTr("Add Group")
+      }
+    }
+  }
+
+  Dialog {
+    id: helpDialog
+
+    modal: true
+    focus: true
+    title: qsTr("Help")
+
+    width: window.width / 3 * 2
+
+    x: (window.width - width) / 2
+    y: window.height / 6
+
+    contentHeight: helpColumn.height
+
+    Column {
+      id: helpColumn
+
+      spacing: 10
+
+      Label {
+        text: qsTr("How to use the Application:")
+
+        width: helpColumn.availableWidth
+        wrapMode: Label.Wrap
+        font.pixelSize: 14
       }
 
+      Label {
+        text: qsTr("1. Create a group by clicking add Group.")
+
+        width: helpColumn.availableWidth
+        wrapMode: Label.Wrap
+        font.pixelSize: 12
+      }
+      Label {
+        text: qsTr("")
+
+        width: helpColumn.availableWidth
+        wrapMode: Label.Wrap
+        font.pixelSize: 12
+      }
+    }
+  }
+
+  Dialog {
+    id: aboutDialog
+
+    modal: true
+    focus: true
+    title: qsTr("About")
+
+    width: window.width / 3 * 2
+
+    x: (window.width - width) / 2
+    y: window.height / 6
+
+    contentHeight: aboutColumn.height
+
+    Column {
+      id: aboutColumn
+
+      spacing: 10
+
+      Label {
+        text: qsTr("This is an application coded with Qt and C++ for forgetful people made by Dizarc.")
+
+        width: aboutDialog.availableWidth
+        wrapMode: Label.Wrap
+        font.pixelSize: 12
+      }
+
+      Label {
+        text: '<html><a href="https://github.com/Dizarc/Forgetti">Project at github</a></html>'
+
+        onLinkActivated: (link) => Qt.openUrlExternally(link)
+        width: aboutDialog.availableWidth
+        wrapMode: Label.Wrap
+        font.pixelSize: 12
+      }
     }
   }
 }
