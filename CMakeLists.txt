@@ -12,6 +12,7 @@ qt_add_executable(appForgetti
     main.cpp
     DatabaseManager.h DatabaseManager.cpp
     GroupsModel.h GroupsModel.cpp
+    ItemsModel.h ItemsModel.cpp
 )
 
 qt_add_qml_module(appForgetti

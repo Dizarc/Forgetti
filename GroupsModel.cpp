@@ -44,6 +44,7 @@ QHash<int, QByteArray> GroupsModel::roleNames() const
 }
 
 bool GroupsModel::add(const QString &name){
+
     bool submitting = false;
 
     insertRow(rowCount() + 1);
@@ -57,9 +58,52 @@ bool GroupsModel::add(const QString &name){
 
         submitting = submitAll();
         if(submitting == false){
-            qWarning() << "Error adding employee: " << lastError().text();
+            qWarning() << "Error adding group: " << lastError().text();
             revertAll();
         }
     }
+    return submitting;
+}
+
+bool GroupsModel::remove(const int &id)
+{
+    QSqlTableModel model;
+
+    model.setTable("Groups");
+    model.setFilter("id = " + QString::number(id));
+    model.select();
+    model.removeRow(0);
+
+    select();
+
+    bool submitting = submitAll();
+    if(submitting == false){
+        qWarning() << "Error removing group: " << lastError().text();
+        revertAll();
+    }
+
+    return submitting;
+}
+
+bool GroupsModel::rename(const int &id, const QString &name)
+{
+    QSqlTableModel model;
+
+    model.setTable("Groups");
+    model.setFilter("id = " + QString::number(id));
+    model.select();
+
+    QSqlRecord record = model.record(0);
+
+    record.setValue("name", name);
+
+    model.setRecord(0, record);
+
+    bool submitting = submitAll();
+    if(submitting == false){
+        qWarning() << "Error renaming group: " << lastError().text();
+        revertAll();
+    }
+
     return submitting;
 }

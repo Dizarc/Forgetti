@@ -20,6 +20,8 @@ public:
 
 public slots:
     bool add(const QString &name);
+    bool remove(const int &id);
+    bool rename(const int &id, const QString &name);
 };
 
 #endif // GROUPSMODEL_H

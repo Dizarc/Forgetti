@@ -1,7 +1,7 @@
 #include "DatabaseManager.h"
 
 const QString DatabaseManager::docPath =
-    QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + "/ForgettiDocuments";
+    QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
 
 DatabaseManager::DatabaseManager(QObject *parent)
 {
@@ -47,7 +47,8 @@ void DatabaseManager::createTables()
 
     QString itemsTable = "CREATE TABLE Items("
                          " id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                         " picture TEXT,"
+                         " name TEXT,"
+                         " pictureSource TEXT,"
                          " groupId INTEGER NOT NULL,"
                          " FOREIGN KEY (groupId) REFERENCES Groups(id) ON DELETE CASCADE);";
     if(!query.exec(itemsTable))
@@ -60,7 +61,17 @@ void DatabaseManager::insertValues()
 
     QString groupsInsert = "INSERT INTO Groups(name) VALUES"
                              " (\"Leaving home\"),"
-                             " (\"Leaving office\");";
+                             " (\"Leaving office\"),"
+                             " (\"Going to the Gym\"),"
+                             " (\"Leaving university\");";
     if(!query.exec(groupsInsert))
         qWarning()<< "Problem while adding to Groups table...";
+
+    QString itemsInsert = "INSERT INTO Items(name, groupId) VALUES"
+                           " (\"Phone\", 1),"
+                           " (\"Keys\", 1),"
+                           " (\"Wallet\", 1),"
+                           " (\" Phone\", 3);";
+    if(!query.exec(itemsInsert))
+        qWarning()<< "Problem while adding to Items table...";
 }
