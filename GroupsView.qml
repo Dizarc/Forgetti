@@ -38,24 +38,15 @@ ColumnLayout{
         text: groupsDelegate.name
         anchors.fill: parent
         padding: 0
+
         Material.roundedScale: Material.NotRounded
 
-        //NOT a good checking implementation
-        checkable: true
-        onCheckedChanged: {
-          if(groupButton.checked){
-            highlighted = true
-            icon.name = "✓"
-
-            icon.height = 15
-          }
-          else{
-            highlighted = false
-            icon.name = ""
-          }
+        onPressAndHold: {
+          groupMenu.popup()
+          groupMenu.id = id
         }
 
-        onClicked: console.log("HEY")
+        onClicked: console.log("Hey")
       }
     }
   }
@@ -68,5 +59,82 @@ ColumnLayout{
     icon.name: "+"
     icon.height: 12
     text: qsTr("Add Group")
+  }
+
+  Menu {
+    id: groupMenu
+
+    property int id
+
+    Action {
+      text: qsTr("Rename")
+      onTriggered: renameDialog.open()
+    }
+    Action {
+      text: qsTr("Delete")
+      onTriggered: deleteDialog.open()
+    }
+  }
+
+  Dialog {
+    id: renameDialog
+
+    modal: true
+    focus: true
+    title: qsTr("Rename")
+
+    standardButtons: Dialog.Save | Dialog.Cancel
+
+    width: window.width / 3 * 2
+
+    x: (window.width - width) / 2
+    y: window.height / 6
+
+    contentHeight: renameColumn.height
+
+    Column {
+      id: renameColumn
+    }
+  }
+
+  Dialog {
+    id: deleteDialog
+
+    modal: true
+    focus: true
+    title: qsTr("Delete")
+
+    standardButtons: Dialog.Ok | Dialog.Cancel
+
+    width: window.width / 3 * 2
+
+    x: (window.width - width) / 2
+    y: window.height / 6
+
+    contentHeight: deleteColumn.height
+
+    onAccepted: GroupsModel.remove(groupMenu.id)
+
+    Column{
+      id: deleteColumn
+
+      spacing: 5
+
+      Label {
+        text: qsTr("Are you sure you want to delete this Group?")
+
+        width: deleteDialog.availableWidth
+        wrapMode: Label.Wrap
+        font.pixelSize: 12
+      }
+
+      Label {
+        text: qsTr("Any items belonging to this group will also get deleted.")
+
+        width: deleteDialog.availableWidth
+        wrapMode: Label.Wrap
+        font.pixelSize: 12
+      }
+    }
   }
 }
