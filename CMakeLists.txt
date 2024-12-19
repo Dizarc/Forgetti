@@ -21,6 +21,7 @@ qt_add_qml_module(appForgetti
 
     QML_FILES
         Main.qml
+        GroupsView.qml
 
     RESOURCES
         qtquickcontrols2.conf
