@@ -54,13 +54,14 @@ bool GroupsModel::add(const QString &name){
     record.setValue("name", name);
 
     if(insertRecord(rowCount(), record)){
-        select();
 
         submitting = submitAll();
         if(submitting == false){
             qWarning() << "Error adding group: " << lastError().text();
             revertAll();
         }
+
+        select();
     }
     return submitting;
 }
@@ -74,13 +75,13 @@ bool GroupsModel::remove(const int &id)
     model.select();
     model.removeRow(0);
 
-    select();
-
     bool submitting = submitAll();
     if(submitting == false){
         qWarning() << "Error removing group: " << lastError().text();
         revertAll();
     }
+
+    select();
 
     return submitting;
 }
@@ -104,6 +105,8 @@ bool GroupsModel::rename(const int &id, const QString &name)
         qWarning() << "Error renaming group: " << lastError().text();
         revertAll();
     }
+
+    select();
 
     return submitting;
 }

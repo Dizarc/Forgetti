@@ -30,6 +30,7 @@ public slots:
     bool rename(const int &id, const QString &name);
     bool changePicture(const int &id, const QString &pictureSource);
     bool changeGroup(const int &id, const int &groupId);
+    void filterByGroup(const int &groupId);
 };
 
 #endif // ITEMSMODEL_H

@@ -3,6 +3,7 @@
 
 #include "DatabaseManager.h"
 #include "GroupsModel.h"
+#include "ItemsModel.h"
 /*
  * TODO: Make group buttons be checkable
  */
@@ -14,6 +15,9 @@ int main(int argc, char *argv[])
 
     GroupsModel *groups = new GroupsModel(&app);
     qmlRegisterSingletonInstance("com.company.GroupsModel", 1, 0, "GroupsModel", groups);
+
+    ItemsModel *items = new ItemsModel(&app);
+    qmlRegisterSingletonInstance("com.company.ItemsModel", 1, 0, "ItemsModel", items);
 
     QQmlApplicationEngine engine;
 

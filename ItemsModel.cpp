@@ -72,13 +72,14 @@ bool ItemsModel::add(const QString &name, const QString &pictureSource, const in
     record.setValue("groupId", groupId);
 
     if(insertRecord(rowCount(), record)){
-        select();
 
         submitting = submitAll();
         if(submitting == false){
             qWarning() << "Error adding item: " << lastError().text();
             revertAll();
         }
+
+        select();
     }
 
     return submitting;
@@ -119,13 +120,13 @@ bool ItemsModel::rename(const int &id, const QString &name)
 
     model.setRecord(0, record);
 
-    select();
-
     bool submitting = submitAll();
     if(submitting == false){
         qWarning() << "Error renaming item: " << lastError().text();
         revertAll();
     }
+
+    select();
 
     return submitting;
 }
@@ -144,13 +145,13 @@ bool ItemsModel::changePicture(const int &id, const QString &pictureSource)
 
     model.setRecord(0, record);
 
-    select();
-
     bool submitting = submitAll();
     if(submitting == false){
         qWarning() << "Error changing picture of item: " << lastError().text();
         revertAll();
     }
+
+    select();
 
     return submitting;
 }
@@ -169,13 +170,19 @@ bool ItemsModel::changeGroup(const int &id, const int &groupId)
 
     model.setRecord(0, record);
 
-    select();
-
     bool submitting = submitAll();
     if(submitting == false){
         qWarning() << "Error changing group of item: " << lastError().text();
         revertAll();
     }
 
+    select();
+
     return submitting;
+}
+
+void ItemsModel::filterByGroup(const int &groupId)
+{
+    setFilter("groupId = " + QString::number(groupId));
+    select();
 }

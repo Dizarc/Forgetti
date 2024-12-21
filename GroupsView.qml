@@ -3,18 +3,20 @@ import QtQuick.Layouts
 import QtQuick.Controls.Material
 
 import com.company.GroupsModel
+import com.company.ItemsModel
 
 ColumnLayout{
   spacing: 0
 
   TableView {
-    id: tableView
+    id: groupsTableView
 
     Layout.fillHeight: true
     Layout.fillWidth: true
 
     focus: true
     clip: true
+
     flickableDirection: Flickable.VerticalFlick
     boundsBehavior: Flickable.StopAtBounds
     ScrollIndicator.vertical: ScrollIndicator { }
@@ -29,7 +31,7 @@ ColumnLayout{
 
       required property int index
 
-      implicitWidth: tableView.width
+      implicitWidth: groupsTableView.width
       implicitHeight: 200
 
       Button {
@@ -42,96 +44,54 @@ ColumnLayout{
         Material.roundedScale: Material.NotRounded
 
         onPressAndHold: {
-          groupMenu.y = groupButton.pressY
-          groupMenu.x = groupButton.pressX
-          groupMenu.open()
+          groupsMenu.y = groupButton.pressY
+          groupsMenu.x = groupButton.pressX
+          groupsMenu.open()
+        }
+
+        onClicked: {
+          window.title = groupsDelegate.name
+          ItemsModel.filterByGroup(groupsDelegate.id)
+          stackView.push(itemsViewComponent)
         }
 
         Menu {
-          id: groupMenu
+          id: groupsMenu
 
           Action {
             text: qsTr("Rename")
-            onTriggered: renameDialog.open()
+
+            onTriggered: {
+              renameDialog.open()
+              renameDialog.id = groupsDelegate.id
+              renameDialog.name = groupsDelegate.name
+            }
           }
           Action {
             text: qsTr("Delete")
-            onTriggered: deleteDialog.open()
-          }
 
-          Dialog {
-            id: renameDialog
-
-            modal: true
-            focus: true
-            title: qsTr("Rename")
-
-            standardButtons: Dialog.Save | Dialog.Cancel
-
-            width: window.width / 3 * 2
-
-            x: (window.width - width) / 2
-            y: window.height / 6
-
-            contentHeight: renameColumn.height
-
-            Column {
-              id: renameColumn
-
-              Label {
-                text: groupsDelegate.id
-                width: deleteDialog.availableWidth
-                wrapMode: Label.Wrap
-                font.pixelSize: 12
-              }
-            }
-          }
-
-          Dialog {
-            id: deleteDialog
-
-            modal: true
-            focus: true
-            title: qsTr("Delete")
-
-            standardButtons: Dialog.Ok | Dialog.Cancel
-
-            width: window.width / 3 * 2
-
-            x: (window.width - width) / 2
-            y: window.height / 6
-
-            contentHeight: deleteColumn.height
-
-            onAccepted: GroupsModel.remove(groupsDelegate.id)
-
-            Column{
-              id: deleteColumn
-
-              spacing: 5
-
-              Label {
-                text: qsTr("Are you sure you want to delete this Group?")
-
-                width: deleteDialog.availableWidth
-                wrapMode: Label.Wrap
-                font.pixelSize: 12
-              }
-
-              Label {
-                text: qsTr("Any items belonging to this group will also get deleted.")
-
-                width: deleteDialog.availableWidth
-                wrapMode: Label.Wrap
-                font.pixelSize: 12
-              }
+            onTriggered: {
+              deleteDialog.open()
+              deleteDialog.id = groupsDelegate.id
             }
           }
         }
-
-        onClicked: console.log("Hey")
       }
     }
+  }
+
+  RenameDialog {
+    id: renameDialog
+
+    onAccepted: GroupsModel.rename(renameDialog.id, renameDialog.newName)
+  }
+
+  DeleteDialog {
+    id: deleteDialog
+
+    warning: qsTr("Are you sure you want to delete this Group?\nAny items belonging to this group will also get deleted.")
+
+    onAccepted: GroupsModel.remove(deleteDialog.id)
   }
 
   Button{
@@ -142,5 +102,44 @@ ColumnLayout{
     icon.name: "+"
     icon.height: 12
     text: qsTr("Add Group")
+
+    onClicked: addDialog.open()
+  }
+
+  Dialog{
+    id: addDialog
+
+    modal: true
+    focus: true
+    title: qsTr("Add")
+
+    standardButtons: Dialog.Save | Dialog.Cancel
+
+    width: window.width / 3 * 2
+
+    x: (window.width - width) / 2
+    y: window.height / 6
+
+    contentHeight: renameColumn.height
+
+    onAccepted: GroupsModel.add(addTextField.displayText)
+
+    Column {
+      id: renameColumn
+
+      spacing: 5
+
+      Label {
+        text: qsTr("Enter a new group:")
+        width: addDialog.availableWidth
+        wrapMode: Label.Wrap
+      }
+
+      TextField {
+        id: addTextField
+
+        width: addDialog.availableWidth
+      }
+    }
   }
 }

@@ -4,6 +4,9 @@ import QtQuick.Controls.Material
 
 ApplicationWindow {
   id: window
+
+  property string title
+
   width: 640
   height: 480
   visible: true
@@ -29,7 +32,7 @@ ApplicationWindow {
       }
 
       Label {
-        text: if(stackView.depth === 1) qsTr("Forgetti")
+        text: stackView.depth === 1 ? qsTr("Forgetti") : window.title
         font.pixelSize: 20
 
         elide: Label.ElideRight
@@ -84,6 +87,11 @@ ApplicationWindow {
     }
 
     initialItem: GroupsView {}
+  }
+
+  Component {
+    id: itemsViewComponent
+    ItemsView { }
   }
 
   Dialog {
