@@ -3,12 +3,14 @@ cmake_minimum_required(VERSION 3.16)
 project(Forgetti VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_AUTORCC ON)
 
 find_package(Qt6 6.5 REQUIRED COMPONENTS Quick Sql)
 
 qt_standard_project_setup(REQUIRES 6.5)
 
 qt_add_executable(appForgetti
+    application.qrc
     main.cpp
     DatabaseManager.h DatabaseManager.cpp
     GroupsModel.h GroupsModel.cpp
@@ -29,6 +31,8 @@ qt_add_qml_module(appForgetti
 
     RESOURCES
         qtquickcontrols2.conf
+        icons/star_empty.png
+        icons/star_filled.png
 )
 
 # Qt for iOS sets MACOSX_BUN

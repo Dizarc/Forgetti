@@ -11,7 +11,8 @@ class GroupsModel : public QSqlTableModel
 public:
     enum Roles{
         idRole = Qt::UserRole + 1,
-        nameRole
+        nameRole,
+        isFavoriteRole
     };
 
     GroupsModel(QObject *parent = nullptr, QSqlDatabase db = QSqlDatabase());
@@ -22,6 +23,7 @@ public slots:
     bool add(const QString &name);
     bool remove(const int &id);
     bool rename(const int &id, const QString &name);
+    bool changeFavorite(const int &id, const int &favorite);
 };
 
 #endif // GROUPSMODEL_H

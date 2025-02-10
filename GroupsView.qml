@@ -28,20 +28,32 @@ ColumnLayout{
 
       required property int id
       required property string name
+      required property bool isFavorite
 
       required property int index
 
       implicitWidth: groupsTableView.width
-      implicitHeight: 200
+      implicitHeight: 50
+      leftPadding: 5
+      rightPadding: 5
+      verticalPadding: 0
 
       Button {
         id: groupButton
 
-        text: groupsDelegate.name
         anchors.fill: parent
-        padding: 0
 
-        Material.roundedScale: Material.NotRounded
+        Material.roundedScale: Material.ExtraSmallScale
+        leftPadding: 10
+        rightPadding: 50
+
+        contentItem: Label {
+          text: groupsDelegate.name
+
+          elide: Label.ElideRight
+          horizontalAlignment: Text.AlignLeft
+          verticalAlignment: Text.AlignVCenter
+        }
 
         onPressAndHold: {
           groupsMenu.y = groupButton.pressY
@@ -55,25 +67,49 @@ ColumnLayout{
           stackView.push(itemsViewComponent)
         }
 
-        Menu {
-          id: groupsMenu
+        Button {
+          id: favoriteButton
 
-          Action {
-            text: qsTr("Rename")
+          implicitHeight: 50
+          implicitWidth: 50
+          anchors.right: parent.right
 
-            onTriggered: {
-              renameDialog.open()
-              renameDialog.id = groupsDelegate.id
-              renameDialog.name = groupsDelegate.name
-            }
+          Material.roundedScale: Material.ExtraSmallScale
+          flat: true
+          checkable: true
+          checked: groupsDelegate.isFavorite
+
+          contentItem: Image {
+            source: favoriteButton.checked ? "qrc:/icons/star_filled" : "qrc:/icons/star_empty"
+            fillMode: Image.PreserveAspectFit
+            sourceSize.height: 50
           }
-          Action {
-            text: qsTr("Delete")
 
-            onTriggered: {
-              deleteDialog.open()
-              deleteDialog.id = groupsDelegate.id
-            }
+          onClicked: {
+
+            GroupsModel.changeFavorite(groupsDelegate.id, favoriteButton.checked)
+          }
+        }
+      }
+
+      Menu {
+        id: groupsMenu
+
+        Action {
+          text: qsTr("Rename")
+
+          onTriggered: {
+            renameDialog.open()
+            renameDialog.id = groupsDelegate.id
+            renameDialog.name = groupsDelegate.name
+          }
+        }
+        Action {
+          text: qsTr("Delete")
+
+          onTriggered: {
+            deleteDialog.open()
+            deleteDialog.id = groupsDelegate.id
           }
         }
       }
@@ -83,11 +119,16 @@ ColumnLayout{
   RenameDialog {
     id: renameDialog
 
-    onAccepted: GroupsModel.rename(renameDialog.id, renameDialog.newName)
+    property int id: -1
+    property  string name: ""
+
+    onAccepted: GroupsModel.rename(renameDialog.id, renameDialog.name)
   }
 
   DeleteDialog {
     id: deleteDialog
+
+    property int id: -1
 
     warning: qsTr("Are you sure you want to delete this Group?\nAny items belonging to this group will also get deleted.")
 

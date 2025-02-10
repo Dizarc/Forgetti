@@ -4,6 +4,7 @@ GroupsModel::GroupsModel(QObject *parent, QSqlDatabase db)
     : QSqlTableModel(parent, db)
 {
     setTable("Groups");
+    setSort(2, Qt::DescendingOrder);
     select();
 }
 
@@ -26,6 +27,9 @@ QVariant GroupsModel::data(const QModelIndex &index, int role) const
     case nameRole:
         value = QSqlTableModel::data(this->index(index.row(), 1));
         break;
+    case isFavoriteRole:
+        value = QSqlTableModel::data(this->index(index.row(), 2));
+        break;
     default:
         break;
     }
@@ -39,6 +43,7 @@ QHash<int, QByteArray> GroupsModel::roleNames() const
 
     roles[idRole] = "id";
     roles[nameRole] = "name";
+    roles[isFavoriteRole] = "isFavorite";
 
     return roles;
 }
@@ -103,6 +108,31 @@ bool GroupsModel::rename(const int &id, const QString &name)
     bool submitting = submitAll();
     if(submitting == false){
         qWarning() << "Error renaming group: " << lastError().text();
+        revertAll();
+    }
+
+    select();
+
+    return submitting;
+}
+
+bool GroupsModel::changeFavorite(const int &id, const int &favorite)
+{
+    QSqlTableModel model;
+
+    model.setTable("Groups");
+    model.setFilter("id = " + QString::number(id));
+    model.select();
+
+    QSqlRecord record = model.record(0);
+
+    record.setValue("isFavorite", favorite);
+
+    model.setRecord(0, record);
+
+    bool submitting = submitAll();
+    if(submitting == false){
+        qWarning() << "Error changing favorite in group: " << lastError().text();
         revertAll();
     }
 

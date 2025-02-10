@@ -41,7 +41,8 @@ void DatabaseManager::createTables()
 
     QString groupTable = "CREATE TABLE Groups("
                          " id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                         " name TEXT NOT NULL);";
+                         " name TEXT NOT NULL,"
+                         " isFavorite INTEGER DEFAULT 0);";
     if(!query.exec(groupTable))
         qWarning()<< "Error creating group table...";
 
