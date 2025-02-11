@@ -5,7 +5,9 @@
 #include "GroupsModel.h"
 #include "ItemsModel.h"
 /*
- * TODO: Make group buttons be checkable
+ *  1. Make itemsView show up in a gridlike way with the pictures of the items on it.
+ *  2. Add change picture to the menu of itemsView
+ *  3. Make the add new Item in itemView open up a dialog that allows picture taking
  */
 int main(int argc, char *argv[])
 {

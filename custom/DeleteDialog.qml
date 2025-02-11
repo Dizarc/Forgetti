@@ -4,7 +4,7 @@ import QtQuick.Controls.Material
 Dialog {
   id: myDeleteDialog
 
-  property int id
+  property int id: -1
 
   property alias warning: deleteText.text
 

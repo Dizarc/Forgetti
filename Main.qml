@@ -69,19 +69,19 @@ ApplicationWindow {
     anchors.fill: parent
 
     pushEnter: Transition {
-      YAnimator {
-        from: (stackView.mirrored ? -1 : 1) * stackView.height
+      XAnimator {
+        from: (stackView.mirrored ? -1 : 1) * stackView.width
         to: 0
-        duration: 300
+        duration: 150
         easing.type: Easing.OutCubic
       }
     }
 
     popExit: Transition {
-      YAnimator {
+      XAnimator {
         from: 0
-        to: (stackView.mirrored ? -1 : 1) * stackView.height
-        duration: 300
+        to: (stackView.mirrored ? -1 : 1) * stackView.width
+        duration: 50
         easing.type: Easing.OutCubic
       }
     }

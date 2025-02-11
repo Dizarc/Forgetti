@@ -5,6 +5,8 @@ import QtQuick.Controls.Material
 import com.company.GroupsModel
 import com.company.ItemsModel
 
+import "custom"
+
 ColumnLayout{
   spacing: 0
 
@@ -119,16 +121,11 @@ ColumnLayout{
   RenameDialog {
     id: renameDialog
 
-    property int id: -1
-    property  string name: ""
-
     onAccepted: GroupsModel.rename(renameDialog.id, renameDialog.name)
   }
 
   DeleteDialog {
     id: deleteDialog
-
-    property int id: -1
 
     warning: qsTr("Are you sure you want to delete this Group?\nAny items belonging to this group will also get deleted.")
 
@@ -161,17 +158,17 @@ ColumnLayout{
     x: (window.width - width) / 2
     y: window.height / 6
 
-    contentHeight: renameColumn.height
+    contentHeight: nameColumn.height
 
     onAccepted: GroupsModel.add(addTextField.displayText)
 
     Column {
-      id: renameColumn
+      id: nameColumn
 
       spacing: 5
 
       Label {
-        text: qsTr("Enter a new group:")
+        text: qsTr("Enter a new group name:")
         width: addDialog.availableWidth
         wrapMode: Label.Wrap
       }

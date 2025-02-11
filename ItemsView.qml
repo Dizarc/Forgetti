@@ -4,6 +4,8 @@ import QtQuick.Controls.Material
 
 import com.company.ItemsModel
 
+import "custom"
+
 ColumnLayout {
   spacing: 0
 
@@ -33,16 +35,27 @@ ColumnLayout {
       required property int index
 
       implicitWidth: itemsTableView.width
-      implicitHeight: 200
+      implicitHeight: 50
+      leftPadding: 5
+      rightPadding: 5
+      verticalPadding: 0
 
       Button {
         id: itemsButton
 
-        text: itemsDelegate.name
         anchors.fill: parent
-        padding: 0
 
-        Material.roundedScale: Material.NotRounded
+        Material.roundedScale: Material.ExtraSmallScale
+        leftPadding: 10
+        rightPadding: 50
+
+        contentItem: Label {
+          text: itemsDelegate.name
+
+          elide: Label.ElideRight
+          horizontalAlignment: Text.AlignLeft
+          verticalAlignment: Text.AlignVCenter
+        }
 
         onClicked: {
           itemsMenu.y = itemsButton.pressY
@@ -82,10 +95,11 @@ ColumnLayout {
 
     Button {
       Material.roundedScale: Material.LargeScale
-
       icon.name: "+"
       icon.height: 12
       text: qsTr("Add Item")
+
+      onClicked: addDialog.open()
     }
 
     Button {
@@ -107,6 +121,12 @@ ColumnLayout {
     warning: qsTr("Are you sure you want to delete this Item?")
 
     onAccepted: ItemsModel.remove(deleteDialog.id)
+  }
+
+  Dialog {
+    id: addDialog
+
+    //onAccepted: ItemsModel.add(addDialog.name)
   }
 
 }

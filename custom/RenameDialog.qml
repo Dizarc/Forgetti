@@ -4,8 +4,8 @@ import QtQuick.Controls.Material
 Dialog {
   id: myRenameDialog
 
-  property int id
-  property string name
+  property int id: -1
+  property string name: ""
 
   property alias newName: renameTextField.displayText
 

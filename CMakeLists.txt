@@ -26,13 +26,11 @@ qt_add_qml_module(appForgetti
         GroupsView.qml
         ItemsView.qml
 
-        RenameDialog.qml
-        DeleteDialog.qml
+        custom/RenameDialog.qml
+        custom/DeleteDialog.qml
 
     RESOURCES
         qtquickcontrols2.conf
-        icons/star_empty.png
-        icons/star_filled.png
 )
 
 # Qt for iOS sets MACOSX_BUN
