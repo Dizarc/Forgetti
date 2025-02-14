@@ -101,10 +101,8 @@ ApplicationWindow {
     focus: true
     title: qsTr("Help")
 
-    width: window.width / 3 * 2
-
-    x: (window.width - width) / 2
-    y: window.height / 6
+    width: window.width - 80
+    anchors.centerIn: Overlay.overlay
 
     contentHeight: helpColumn.height
 
@@ -145,10 +143,8 @@ ApplicationWindow {
     focus: true
     title: qsTr("About")
 
-    width: window.width / 3 * 2
-
-    x: (window.width - width) / 2
-    y: window.height / 6
+    width: window.width - 80
+    anchors.centerIn: Overlay.overlay
 
     contentHeight: aboutColumn.height
 

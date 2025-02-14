@@ -14,11 +14,8 @@ Dialog {
 
   standardButtons: Dialog.Ok | Dialog.Cancel
 
-  width: window.width / 3 * 2
-  height: window.height / 7 * 2.5
-
-  x: (window.width - width) / 2
-  y: (window.height - height) / 6
+  width: window.width - 80
+  anchors.centerIn: Overlay.overlay
 
   Label {
     id: deleteText

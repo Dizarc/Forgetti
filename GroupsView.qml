@@ -57,16 +57,16 @@ ColumnLayout{
           verticalAlignment: Text.AlignVCenter
         }
 
+        onClicked: {
+          window.title = groupsDelegate.name
+          ItemsModel.filterByGroup(groupsDelegate.id)
+          stackView.push(itemsViewComponent, {"group": groupsDelegate.id})
+        }
+
         onPressAndHold: {
           groupsMenu.y = groupButton.pressY
           groupsMenu.x = groupButton.pressX
           groupsMenu.open()
-        }
-
-        onClicked: {
-          window.title = groupsDelegate.name
-          ItemsModel.filterByGroup(groupsDelegate.id)
-          stackView.push(itemsViewComponent)
         }
 
         Button {
@@ -88,7 +88,6 @@ ColumnLayout{
           }
 
           onClicked: {
-
             GroupsModel.changeFavorite(groupsDelegate.id, favoriteButton.checked)
           }
         }
@@ -132,7 +131,7 @@ ColumnLayout{
     onAccepted: GroupsModel.remove(deleteDialog.id)
   }
 
-  Button{
+  Button {
     Layout.alignment: Qt.AlignRight
 
     Material.roundedScale: Material.LargeScale
@@ -144,20 +143,17 @@ ColumnLayout{
     onClicked: addDialog.open()
   }
 
-  Dialog{
+  Dialog {
     id: addDialog
 
     modal: true
     focus: true
-    title: qsTr("Add")
+    title: qsTr("Add Group")
 
     standardButtons: Dialog.Save | Dialog.Cancel
 
-    width: window.width / 3 * 2
-
-    x: (window.width - width) / 2
-    y: window.height / 6
-
+    width: window.width - 80
+    anchors.centerIn: parent
     contentHeight: nameColumn.height
 
     onAccepted: GroupsModel.add(addTextField.displayText)

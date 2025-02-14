@@ -1,13 +1,19 @@
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Dialogs
 import QtQuick.Controls.Material
+import QtCore
 
 import com.company.ItemsModel
 
 import "custom"
 
 ColumnLayout {
+  id: itemsView
+
   spacing: 0
+
+  property int group
 
   TableView {
     id: itemsTableView
@@ -57,32 +63,54 @@ ColumnLayout {
           verticalAlignment: Text.AlignVCenter
         }
 
-        onClicked: {
+        onClicked: imagePopup.open()
+
+        onPressAndHold: {
           itemsMenu.y = itemsButton.pressY
           itemsMenu.x = itemsButton.pressX
           itemsMenu.open()
         }
+      }
 
-        Menu {
-          id: itemsMenu
+      Menu {
+        id: itemsMenu
 
-          Action {
-            text: qsTr("Rename")
+        Action {
+          text: qsTr("Rename")
 
-            onTriggered: {
-              renameDialog.open()
-              renameDialog.id = itemsDelegate.id
-              renameDialog.name = itemsDelegate.name
-            }
+          onTriggered: {
+            renameDialog.open()
+            renameDialog.id = itemsDelegate.id
+            renameDialog.name = itemsDelegate.name
           }
-          Action {
-            text: qsTr("Delete")
+        }
+        Action {
+          text: qsTr("Delete")
 
-            onTriggered: {
-              deleteDialog.open()
-              deleteDialog.id = itemsDelegate.id
-            }
+          onTriggered: {
+            deleteDialog.open()
+            deleteDialog.id = itemsDelegate.id
           }
+        }
+      }
+
+      Popup {
+        id: imagePopup
+
+        modal: true
+        focus: true
+
+        width: window.width - 80
+
+        anchors.centerIn: Overlay.overlay
+
+        height: window.height / 2
+
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
+
+        contentItem: Image {
+          source: itemsDelegate.pictureSource
+          fillMode: Image.PreserveAspectFit
         }
       }
     }
@@ -126,7 +154,80 @@ ColumnLayout {
   Dialog {
     id: addDialog
 
-    //onAccepted: ItemsModel.add(addDialog.name)
+    modal: true
+    focus: true
+    title: qsTr("Add Item")
+    standardButtons: Dialog.Save | Dialog.Cancel
+
+    width: window.width - 80
+    anchors.centerIn: parent
+    contentHeight: addColumn.height
+
+    onAccepted: ItemsModel.add(addTextField.displayText, itemImage.source, itemsView.group)
+
+    Column {
+      id: addColumn
+
+      spacing: 5
+
+      Label {
+        text: qsTr("Enter a new item name:")
+        width: addDialog.availableWidth
+        wrapMode: Label.Wrap
+      }
+
+      TextField {
+        id: addTextField
+
+        width: addDialog.availableWidth
+      }
+
+      Label {
+        text: qsTr("Choose a picture:")
+        width: addDialog.availableWidth
+        wrapMode: Label.Wrap
+      }
+
+      Rectangle {
+        id: imageRect
+
+        width: addDialog.availableWidth - 10
+        height: 200
+
+        color: "transparent"
+
+        Image {
+          id: itemImage
+
+          anchors.fill: parent
+
+          source: ""
+          sourceSize.width: imageRect.width - 6
+
+          fillMode: Image.PreserveAspectFit
+        }
+
+        Label {
+          anchors.centerIn: parent
+          text: qsTr("Click to select an image")
+          opacity: 0.7
+        }
+
+        MouseArea {
+          anchors.fill: parent
+          onClicked: imageChoiceFileDialog.open()
+        }
+      }
+    }
+
+    FileDialog {
+      id: imageChoiceFileDialog
+      title: qsTr("Select an Image")
+
+      nameFilters: ["Image files (*.png *.jpg *.jpeg *.bmp)"]
+      currentFolder: StandardPaths.standardLocations(StandardPaths.PicturesLocation)[0]
+      onAccepted: itemImage.source = selectedFile
+    }
   }
 
 }
