@@ -5,8 +5,7 @@
 #include "GroupsModel.h"
 #include "ItemsModel.h"
 /*
- *  1. Make itemsView show up in a gridlike way with the pictures of the items on it?
- *  2. Add change picture to the menu of itemsView
+ *  1. Add change picture to the menu of itemsView
  */
 int main(int argc, char *argv[])
 {

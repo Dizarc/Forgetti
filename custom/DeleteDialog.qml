@@ -12,7 +12,7 @@ Dialog {
   focus: true
   title: qsTr("Delete")
 
-  standardButtons: Dialog.Ok | Dialog.Cancel
+  standardButtons: Dialog.Yes | Dialog.No
 
   width: window.width - 80
   anchors.centerIn: Overlay.overlay

@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import QtQuick.Dialogs
 import QtQuick.Controls.Material
 import QtCore
+import QtQuick.Effects
 
 import com.company.ItemsModel
 
@@ -15,11 +16,14 @@ ColumnLayout {
 
   property int group
 
-  TableView {
-    id: itemsTableView
+  GridView {
+    id: itemsGridView
 
     Layout.fillHeight: true
     Layout.fillWidth: true
+
+    cellWidth: (Window.width / 2) - 3
+    cellHeight: Window.height / 2
 
     focus: true
     clip: true
@@ -40,11 +44,10 @@ ColumnLayout {
 
       required property int index
 
-      implicitWidth: itemsTableView.width
-      implicitHeight: 50
-      leftPadding: 5
-      rightPadding: 5
-      verticalPadding: 0
+      implicitWidth: itemsGridView.cellWidth
+      implicitHeight: itemsGridView.cellHeight
+
+      padding: 5
 
       Button {
         id: itemsButton
@@ -52,20 +55,27 @@ ColumnLayout {
         anchors.fill: parent
 
         Material.roundedScale: Material.ExtraSmallScale
-        leftPadding: 10
-        rightPadding: 50
 
-        contentItem: Label {
-          text: itemsDelegate.name
+        contentItem: ColumnLayout {
+          Label {
+            text: itemsDelegate.name
 
-          elide: Label.ElideRight
-          horizontalAlignment: Text.AlignLeft
-          verticalAlignment: Text.AlignVCenter
+            elide: Label.ElideRight
+            horizontalAlignment: Label.AlignHCenter
+            Layout.fillWidth: true
+          }
+          Image {
+            id: imageItem
+            source: itemsDelegate.pictureSource
+
+            fillMode: Image.PreserveAspectFit
+            Layout.alignment: Qt.AlignHCenter
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+          }
         }
 
-        onClicked: imagePopup.open()
-
-        onPressAndHold: {
+        onClicked: {
           itemsMenu.y = itemsButton.pressY
           itemsMenu.x = itemsButton.pressX
           itemsMenu.open()
@@ -93,30 +103,10 @@ ColumnLayout {
           }
         }
       }
-
-      Popup {
-        id: imagePopup
-
-        modal: true
-        focus: true
-
-        width: window.width - 80
-
-        anchors.centerIn: Overlay.overlay
-
-        height: window.height / 2
-
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
-
-        contentItem: Image {
-          source: itemsDelegate.pictureSource
-          fillMode: Image.PreserveAspectFit
-        }
-      }
     }
   }
 
-  Row{
+  Row {
     Layout.alignment: Qt.AlignRight
 
     spacing: 5
