@@ -15,8 +15,8 @@ Dialog {
 
   standardButtons: Dialog.Save | Dialog.Cancel
 
-  width: window.width - 80
-  anchors.centerIn: Overlay.overlay
+  width: parent ? parent.width - 80 : 200
+  anchors.centerIn: parent
   contentHeight: renameColumn.height
 
   Column {

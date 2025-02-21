@@ -14,12 +14,14 @@ Dialog {
 
   standardButtons: Dialog.Yes | Dialog.No
 
-  width: window.width - 80
-  anchors.centerIn: Overlay.overlay
+  width: parent ? parent.width - 80 : 200
+  contentHeight: deleteText.height
+  anchors.centerIn: parent
 
   Label {
     id: deleteText
 
+    height: 50
     width: myDeleteDialog.availableWidth
     wrapMode: Label.Wrap
   }

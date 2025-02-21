@@ -7,7 +7,7 @@ import com.company.ItemsModel
 
 import "custom"
 
-ColumnLayout{
+ColumnLayout {
   spacing: 0
 
   TableView {
