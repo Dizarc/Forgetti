@@ -65,7 +65,6 @@ ColumnLayout {
             Layout.fillWidth: true
           }
           Image {
-            id: imageItem
             source: itemsDelegate.pictureSource
 
             fillMode: Image.PreserveAspectFit
@@ -124,6 +123,10 @@ ColumnLayout {
       Material.roundedScale: Material.LargeScale
 
       text: qsTr("Run")
+
+      onClicked: {
+        stackView.push(itemsRunComponent)
+      }
     }
   }
 

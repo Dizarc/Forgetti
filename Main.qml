@@ -94,6 +94,12 @@ ApplicationWindow {
     ItemsView { }
   }
 
+  Component {
+    id: itemsRunComponent
+
+    ItemsRun { }
+  }
+
   Dialog {
     id: helpDialog
 

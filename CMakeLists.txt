@@ -25,6 +25,7 @@ qt_add_qml_module(appForgetti
         Main.qml
         GroupsView.qml
         ItemsView.qml
+        ItemsRun.qml
 
         custom/RenameDialog.qml
         custom/DeleteDialog.qml
